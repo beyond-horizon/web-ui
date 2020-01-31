@@ -1565,7 +1565,7 @@ export default {
         start: startDate,
         line: roundLine(y, milestoneLineHeight, milestoneMaxLines)
       };
-      console.log(m);
+      //console.log(m);
       data.milestones.push(m);
       renderMilestone();
       localD3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
@@ -1583,7 +1583,7 @@ export default {
       }
       if (e.keyCode === 46) {
         //delete
-        console.log("delete");
+        //console.log("delete");
         localD3.selectAll(".selected").call(removeItens);
       }
     };
