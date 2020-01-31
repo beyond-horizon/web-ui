@@ -695,9 +695,13 @@ export default {
           : d3.max(data.milestones, d => d.line) + 1;
 
       timelineMilestoneSVG.attr("height", milestoneLineHeight * milestoneLines);
+      d3.select("#timeline-milestone").style(
+        "height",
+        milestoneLineHeight * milestoneLines
+      );
       d3.select("#timeline-lanes").style(
         "margin-top",
-        87 + milestoneLineHeight * milestoneLines + "px"
+        83 + milestoneLineHeight * milestoneLines + "px"
       );
 
       gMilestone.attr(
@@ -847,7 +851,7 @@ export default {
             .select(`text#title_${d.id}`)
             .node()
             .getBBox();
-          return "translate(" + (bb.width + 20) + ",-1)";
+          return "translate(" + (bb.width + 20) + ",2)";
         })
         .append("foreignObject")
         .attr("x", 0)
@@ -1058,7 +1062,7 @@ export default {
             .select(`text#title_${d.id}`)
             .node()
             .getBBox();
-          return "translate(" + (bb.width + 20) + ",-1)";
+          return "translate(" + (bb.width + 20) + ",2)";
         })
         .append("foreignObject")
         .attr("x", "0px")
@@ -1532,7 +1536,7 @@ export default {
 
           d3.select("#timeline-lanes").style(
             "margin-top",
-            87 + milestoneLineHeight * (maxline + 1) + "px"
+            83 + milestoneLineHeight * (maxline + 1) + "px"
           );
           /*           const milestoneSVGHeight =
             milestoneLineHeight * (maxline + 1) <= 0
@@ -1607,7 +1611,7 @@ export default {
     }
 
     function addMilestone() {
-      const y = d3.event.y - 87;
+      const y = d3.event.y - 83;
       const adjustedX = d3.event.x - paddingLeft - 10 + window.pageXOffset;
       let x = adjustedX < 1 ? 1 : adjustedX;
       x = x >= scaleRangeMax ? scaleRangeMax + 1 : x;
@@ -1693,7 +1697,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 #timeline {
   width: 100%;
   font-family: Roboto !important;
@@ -1790,6 +1794,6 @@ export default {
 .template {
   cursor: col-resize;
   fill: #656565;
-  opacity: 0.45;
+  opacity: 0.15;
 }
 </style>
