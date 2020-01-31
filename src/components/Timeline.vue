@@ -1693,7 +1693,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 #timeline {
   width: 100%;
   font-family: Roboto !important;
