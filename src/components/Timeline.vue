@@ -578,7 +578,7 @@ export default {
       ]
     };
 
-    var localD3 = this.$d3;
+    var d3 = this.$d3;
 
     var data = two_levels;
 
@@ -605,7 +605,7 @@ export default {
     var lineHeight = objectHeight + linePadding * 2;
 
     var scaleViewWidth = parseInt(
-      localD3.select("#timeline-scale").style("width"),
+      d3.select("#timeline-scale").style("width"),
       10
     );
     var scaleWidth = scaleViewWidth;
@@ -614,23 +614,23 @@ export default {
     var scaleEndDate = new Date("2020-12-31");
 
     // Timeline scale
-    var timelineScaleSVG = localD3
+    var timelineScaleSVG = d3
       .select("#timeline-scale")
       .append("svg")
       .attr("width", scaleViewWidth)
       .attr("height", 45);
     var gAxis = timelineScaleSVG.append("g");
 
-    var xScale = localD3.scaleTime();
-    var xAxis = localD3.axisTop(xScale);
+    var xScale = d3.scaleTime();
+    var xAxis = d3.axisTop(xScale);
 
     function updateScale() {
       scaleViewWidth = parseInt(
-        localD3.select("#timeline-scale").style("width"),
+        d3.select("#timeline-scale").style("width"),
         10
       );
-      var monthsTicks = localD3.timeMonth.count(scaleStartDate, scaleEndDate);
-      xAxis.tickFormat(localD3.timeFormat("%b %Y"));
+      var monthsTicks = d3.timeMonth.count(scaleStartDate, scaleEndDate);
+      xAxis.tickFormat(d3.timeFormat("%b %Y"));
       var ticksWidth = monthsTicks * 150;
       scaleWidth = ticksWidth > scaleViewWidth ? ticksWidth : scaleViewWidth;
 
@@ -649,7 +649,7 @@ export default {
       timelineScaleSVG.attr("width", scaleViewWidth);
       timelineMilestoneSVG.attr("width", scaleViewWidth);
 
-      localD3.selectAll("#timeline-lanes svg.lane").attr("width", scaleWidth);
+      d3.selectAll("#timeline-lanes svg.lane").attr("width", scaleWidth);
       if (data.laneLevels === 1) {
         renderLane();
       } else {
@@ -659,10 +659,10 @@ export default {
       renderMilestone();
     }
 
-    localD3.select(window).on("resize", updateScale);
+    d3.select(window).on("resize", updateScale);
 
     // Timeline milestones
-    var timelineMilestoneSVG = localD3
+    var timelineMilestoneSVG = d3
       .select("#timeline-milestone")
       .append("svg")
       .attr("width", scaleViewWidth)
@@ -671,19 +671,19 @@ export default {
 
     var gMilestone = timelineMilestoneSVG.append("g").attr("id", "gMilestone");
 
-    const dragMilestone = localD3
+    const dragMilestone = d3
       .drag()
       .on("start", milestoneDragstarted)
       .on("drag", milestoneDragged)
       .on("end", milestoneDragended);
 
-    const dragObject = localD3
+    const dragObject = d3
       .drag()
       .on("start", objectDragstarted)
       .on("drag", objectDragged)
       .on("end", objectDragended);
 
-    const resizeObject = localD3
+    const resizeObject = d3
       .drag()
       .on("drag", objectResized)
       .on("end", objectResizeended);
@@ -692,12 +692,13 @@ export default {
       const milestoneLines =
         data.milestones.length === 0
           ? 1
-          : localD3.max(data.milestones, d => d.line) + 1;
+          : d3.max(data.milestones, d => d.line) + 1;
 
       timelineMilestoneSVG.attr("height", milestoneLineHeight * milestoneLines);
-      localD3
-        .select("#timeline-lanes")
-        .style("margin-top", 87 + milestoneLineHeight * milestoneLines + "px");
+      d3.select("#timeline-lanes").style(
+        "margin-top",
+        87 + milestoneLineHeight * milestoneLines + "px"
+      );
 
       gMilestone.attr(
         "transform",
@@ -730,7 +731,7 @@ export default {
       milestonesEnter
         .append("path")
         .attr("d", "M0 0 L8 10 L0 20 L-8 10Z")
-        .style("fill", (d, i) => localD3.schemeTableau10[(i % 2) + 2]) //TODO: pegar a cor do milestone do array de data
+        .style("fill", (d, i) => d3.schemeTableau10[(i % 2) + 2]) //TODO: pegar a cor do milestone do array de data
         .style("stroke", "#B7B7B7");
 
       const gText = milestonesEnter
@@ -786,7 +787,7 @@ export default {
     function updateMilestoneTextPosition(selection) {
       selection.each(function(d) {
         const x = xScale(new Date(d.start));
-        const gText = localD3.select(this).select(".milestone-text");
+        const gText = d3.select(this).select(".milestone-text");
         if (x + paddingLeft >= scaleWidth - paddingRight - d.bbox.width) {
           gText.attr("transform", "translate(-10,8)");
           gText.select("text").attr("text-anchor", "end");
@@ -800,7 +801,7 @@ export default {
     }
 
     function renderLaneWithSubLane() {
-      var lanes = localD3
+      var lanes = d3
         .select("#timeline-lanes")
         .selectAll("svg.lane")
         .data(data.lanes);
@@ -842,7 +843,7 @@ export default {
         .append("g")
         .attr("class", "header-metrics")
         .attr("transform", d => {
-          const bb = localD3
+          const bb = d3
             .select(`text#title_${d.id}`)
             .node()
             .getBBox();
@@ -877,7 +878,7 @@ export default {
 
     function renderLaneSubLanes(selection) {
       selection.each(function(d) {
-        const sublanes = localD3
+        const sublanes = d3
           .select(this)
           .selectAll("g.sub-lane")
           .data(d.sub_lanes);
@@ -890,6 +891,18 @@ export default {
           .append("g")
           .attr("class", "sub-lane")
           .attr("transform", (d, i) => "translate(0," + i * laneHeight + ")");
+
+        sublanesEnter
+          .append("rect")
+          .attr("class", "lane-mouse-interface")
+          .attr("x", paddingLeft)
+          .attr("y", 0)
+          .attr("width", scaleWidth)
+          .attr("height", laneHeight)
+          .style("opacity", 0)
+          .on("mousedown", createNewObject)
+          .on("mouseup", saveNewObject)
+          .on("mousemove", resizeNewObject);
 
         sublanesEnter
           .append("rect")
@@ -967,12 +980,18 @@ export default {
         sublanesUpdate.select(".sub-lane-objects").call(renderLaneObjects);
 
         sublanesUpdate.select(".sub-lane-lines").call(renderLaneLines);
+
+        sublanesUpdate
+          .select(".lane-mouse-interface")
+          .attr("x", paddingLeft)
+          .attr("width", scaleWidth)
+          .attr("height", laneHeight);
       });
     }
 
     function renderSubLaneMetricsLabels(selection) {
       selection.each(function(d) {
-        const labels = localD3
+        const labels = d3
           .select(this)
           .selectAll("text")
           .data(d.metrics);
@@ -987,7 +1006,7 @@ export default {
     }
 
     function renderLane() {
-      const lanes = localD3
+      const lanes = d3
         .select("#timeline-lanes")
         .selectAll("svg.lane")
         .data(data.lanes);
@@ -998,7 +1017,7 @@ export default {
         .attr("class", "lane")
         .attr("width", scaleWidth)
         .attr("height", d => {
-          const totalLines = localD3.max(d.objects, d => d.line) + 1;
+          const totalLines = d3.max(d.objects, d => d.line) + 1;
           return totalLines * lineHeight + 32; //32 = 22px da altura do header + 10px de margem inferior
         });
 
@@ -1035,7 +1054,7 @@ export default {
         .append("g")
         .attr("class", "header-metrics")
         .attr("transform", d => {
-          const bb = localD3
+          const bb = d3
             .select(`text#title_${d.id}`)
             .node()
             .getBBox();
@@ -1070,10 +1089,9 @@ export default {
 
     function renderLaneLines(selection) {
       selection.each(function(d) {
-        const totalLines = localD3.max(d.objects, d => d.line);
+        const totalLines = d3.max(d.objects, d => d.line);
         for (var i = 1; i <= totalLines; i++) {
-          localD3
-            .select(this)
+          d3.select(this)
             .append("line")
             .attr("x1", paddingLeft)
             .attr("y1", lineHeight * i)
@@ -1087,7 +1105,7 @@ export default {
 
     function renderLaneObjects(selection) {
       selection.each(function(d) {
-        const objects = localD3
+        const objects = d3
           .select(this)
           .selectAll("g.lane-object")
           .data(d.objects);
@@ -1228,7 +1246,7 @@ export default {
 
     function renderMetrics(selection) {
       selection.each(function(d) {
-        const metrics = localD3
+        const metrics = d3
           .select(this)
           .selectAll(".metric")
           .data(d.metrics);
@@ -1238,7 +1256,7 @@ export default {
           .append("g")
           .attr("class", "metric")
           .attr("transform", (d, i) => {
-            if (localD3.select(this).classed("metrics-vertical")) {
+            if (d3.select(this).classed("metrics-vertical")) {
               return (
                 "translate(0, " + (metricHeight * i + metricSpace * i) + ")"
               );
@@ -1273,14 +1291,14 @@ export default {
     function renderLaneMilestonesLines(selection) {
       selection.each(function(d) {
         let laneHeight;
-        if (localD3.select(this).classed("sub-lane-milestones")) {
+        if (d3.select(this).classed("sub-lane-milestones")) {
           laneHeight = lineHeight * 2 * d.sub_lanes.length + 32;
         } else {
-          const totalLines = localD3.max(d.objects, d => d.line) + 1;
+          const totalLines = d3.max(d.objects, d => d.line) + 1;
           laneHeight = totalLines * lineHeight + 32;
         }
 
-        const lines = localD3
+        const lines = d3
           .select(this)
           .selectAll("line")
           .data(data.milestones, d => d.id);
@@ -1300,7 +1318,7 @@ export default {
           .attr("x2", d => xScale(new Date(d.start)))
           .attr("y2", laneHeight)
           //.style('stroke', '#CBCBCB')
-          .style("stroke", (d, i) => localD3.schemeTableau10[(i % 2) + 2]);
+          .style("stroke", (d, i) => d3.schemeTableau10[(i % 2) + 2]);
 
         const linesUpdate = linesEnter.merge(lines);
 
@@ -1315,7 +1333,7 @@ export default {
 
     function renderLaneMetrics(selection) {
       selection.each(function(d) {
-        var metrics = localD3
+        var metrics = d3
           .select(this)
           .select("div")
           .selectAll(".metric")
@@ -1398,8 +1416,7 @@ export default {
             donutData[0].color = "#E65C67";
           }
         }
-        localD3
-          .select(this)
+        d3.select(this)
           .selectAll(".donut-arc")
           .data(donutData)
           .enter()
@@ -1407,7 +1424,7 @@ export default {
           .attr("class", "donut-arc")
           .attr(
             "d",
-            localD3
+            d3
               .arc()
               .innerRadius(3)
               .outerRadius(7)
@@ -1417,7 +1434,7 @@ export default {
     }
 
     // Update on horizontal scroll
-    localD3.select(window).on("scroll.scroller", position);
+    d3.select(window).on("scroll.scroller", position);
 
     function position() {
       gMilestone.attr(
@@ -1432,10 +1449,10 @@ export default {
 
     updateScale();
 
-    var format = localD3.timeFormat("%Y-%m-%d");
+    var format = d3.timeFormat("%Y-%m-%d");
 
     function objectResized(d) {
-      var point = localD3.mouse(this.parentNode.parentNode),
+      var point = d3.mouse(this.parentNode.parentNode),
         p = { x: point[0], y: point[1] };
 
       let mouseX = p.x;
@@ -1446,14 +1463,11 @@ export default {
       }
       d.finish = format(xScale.invert(mouseX));
 
-      localD3
-        .select(this)
-        .attr(
-          "x",
-          d => xScale(new Date(d.finish)) - xScale(new Date(d.start)) - 8
-        );
-      localD3
-        .select(this.parentNode)
+      d3.select(this).attr(
+        "x",
+        d => xScale(new Date(d.finish)) - xScale(new Date(d.start)) - 8
+      );
+      d3.select(this.parentNode)
         .select(".duration")
         .attr(
           "width",
@@ -1466,15 +1480,14 @@ export default {
     }
 
     function objectDragstarted(d) {
-      d.delta = xScale(new Date(d.start)) - localD3.event.x;
+      d.delta = xScale(new Date(d.start)) - d3.event.x;
     }
 
     function objectDragged() {
-      localD3
-        .select(this)
+      d3.select(this)
         .raise()
         .attr("transform", d => {
-          let mouseX = localD3.event.x + d.delta;
+          let mouseX = d3.event.x + d.delta;
           if (mouseX < 1) {
             mouseX = 1;
           } else if (mouseX > scaleRangeMax) {
@@ -1495,67 +1508,107 @@ export default {
     function milestoneDragstarted() {}
 
     function milestoneDragged() {
-      localD3
-        .select(this)
+      d3.select(this)
         .raise()
         .attr("transform", d => {
-          let mouseX = localD3.event.x;
+          let mouseX = d3.event.x;
           if (mouseX < 1) {
             mouseX = 1;
           } else if (mouseX > scaleRangeMax) {
             mouseX = scaleRangeMax + 1;
           }
           d.start = format(xScale.invert(mouseX));
-          localD3
-            .select(this)
+          d3.select(this)
             .select("tspan.milestone-date")
             .text(d.start);
           const x = xScale(new Date(d.start));
           d.line = roundLine(
-            localD3.event.y,
+            d3.event.y,
             milestoneLineHeight,
             milestoneMaxLines
           );
 
-          const maxline = localD3.max(data.milestones, d => d.line);
+          const maxline = d3.max(data.milestones, d => d.line);
 
-          localD3
-            .select("#timeline-lanes")
-            .style(
-              "margin-top",
-              87 + milestoneLineHeight * (maxline + 1) + "px"
-            );
+          d3.select("#timeline-lanes").style(
+            "margin-top",
+            87 + milestoneLineHeight * (maxline + 1) + "px"
+          );
           /*           const milestoneSVGHeight =
             milestoneLineHeight * (maxline + 1) <= 0
               ? milestoneLineHeight
               : milestoneLineHeight * (maxline + 1); */
-          localD3
-            .select("#timeline-milestone svg")
-            .attr("height", milestoneLineHeight * (maxline + 1));
+          d3.select("#timeline-milestone svg").attr(
+            "height",
+            milestoneLineHeight * (maxline + 1)
+          );
           return "translate(" + x + "," + milestoneLineHeight * d.line + ")";
         })
         .call(updateMilestoneTextPosition);
     }
 
     function milestoneDragended() {
-      localD3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
-      localD3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
+      d3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
+      d3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
     }
 
     function clearSelection() {
-      localD3.selectAll(".selected").classed("selected", false);
+      d3.selectAll(".selected").classed("selected", false);
     }
     // Click functions
 
+    function createNewObject() {
+      var point = d3.mouse(this.parentNode),
+        p = { x: point[0], y: point[1] };
+      const line = roundLine(p.y, lineHeight, 100);
+
+      d3.select(this.parentNode)
+        .select(".sub-lane-objects")
+        .append("rect")
+        .attr("class", "template")
+        .attr("x", p.x - paddingLeft)
+        .attr("y", lineHeight * line + 20)
+        .attr("rx", objectBarRoundedCorner)
+        .attr("ry", objectBarRoundedCorner)
+        .attr("height", objectBarHeight)
+        .attr("width", 20)
+        .on("mousemove", resizeNewObject)
+        .on("mouseup", saveNewObject);
+    }
+
+    function resizeNewObject() {
+      const template = d3.select(".template");
+      if (template.empty()) {
+        return;
+      }
+      var point = d3.mouse(this.parentNode),
+        p = { x: point[0], y: point[1] };
+
+      if (d3.select(this).classed("template")) {
+        p.x = p.x - template.attr("x") + 20;
+      } else {
+        p.x = p.x - template.attr("x") - paddingLeft;
+      }
+
+      const width = p.x < 20 ? 20 : p.x;
+      console.log(p.x + " - " + template.attr("x") + " - " + width);
+      template.attr("width", width);
+    }
+
+    function saveNewObject() {
+      console.log("mouseup");
+      d3.selectAll(".template").remove();
+    }
+
     function selectMilestone() {
-      const state = !localD3.select(this).classed("selected");
+      const state = !d3.select(this).classed("selected");
       clearSelection();
-      localD3.select(this).classed("selected", state);
+      d3.select(this).classed("selected", state);
     }
 
     function addMilestone() {
-      const y = localD3.event.y - 87;
-      const adjustedX = localD3.event.x - paddingLeft - 10 + window.pageXOffset;
+      const y = d3.event.y - 87;
+      const adjustedX = d3.event.x - paddingLeft - 10 + window.pageXOffset;
       let x = adjustedX < 1 ? 1 : adjustedX;
       x = x >= scaleRangeMax ? scaleRangeMax + 1 : x;
       const startDate = format(xScale.invert(x));
@@ -1568,12 +1621,12 @@ export default {
       //console.log(m);
       data.milestones.push(m);
       renderMilestone();
-      localD3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
-      localD3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
+      d3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
+      d3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
     }
 
     // remove unecessary svg created to be able to get the correct body 100% width
-    localD3.select("#timeline-lanes svg").remove();
+    d3.select("#timeline-lanes svg").remove();
 
     // keyboard key pressed
     document.onkeydown = function(e) {
@@ -1584,20 +1637,18 @@ export default {
       if (e.keyCode === 46) {
         //delete
         //console.log("delete");
-        localD3.selectAll(".selected").call(removeItens);
+        d3.selectAll(".selected").call(removeItens);
       }
     };
 
     function removeItens(selection) {
       selection.each(function(d) {
-        const item = localD3.select(this);
+        const item = d3.select(this);
         if (item.classed("milestone")) {
           data.milestones.splice(data.milestones.indexOf(d), 1);
           renderMilestone();
-          localD3
-            .selectAll(".sub-lane-milestones")
-            .call(renderLaneMilestonesLines);
-          localD3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
+          d3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
+          d3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
         }
       });
     }
@@ -1735,5 +1786,10 @@ export default {
 }
 .resize {
   cursor: col-resize;
+}
+.template {
+  cursor: col-resize;
+  fill: #656565;
+  opacity: 0.45;
 }
 </style>
