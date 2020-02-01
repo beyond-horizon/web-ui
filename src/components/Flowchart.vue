@@ -754,7 +754,7 @@ export default {
 
       let target = localD3.select(".node-new");
 
-      if (!target.empty() && !target.classed(".node-new-stop")) {
+      if (!target.empty() && !target.classed("node-new-stop")) {
         const link = localD3.select(".link-new");
         let targetBox = getBBox(target);
         const source = localD3.select(`#node_${link.attr("hrz-source")}`);
@@ -1286,7 +1286,9 @@ export default {
           });
 
           updatePositionLinks();
+          onResizeWindow();
           updateChart();
+
           return;
         }
       }
@@ -1378,7 +1380,6 @@ export default {
     window.addEventListener("resize", onResizeWindow);
     document.addEventListener("keydown", onKeyDownDocument);
     document.addEventListener("keyup", onKeyUpDocument);
-    // document.addEventListener("mousemove", onMouseMoveSvg);
     document.addEventListener("mouseup", onMouseUpDocument);
   }
 };
