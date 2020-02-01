@@ -117,6 +117,7 @@ export default {
     let width = parseInt(localD3.select(".svg-container").style("width"), 10);
     let height = parseInt(localD3.select(".svg-container").style("height"), 10);
 
+    const ANIMATION = 350;
     const RESOLUTION = 20;
     const MIN_LANE_HEIGHT = 120;
     const ARROW_SIZE = 10;
@@ -128,16 +129,38 @@ export default {
     // let pageZoomScale = 1;
     let isMouseSelectingMultiple = false;
 
-    localD3
+    let { x: minWidth, y: minHeight } = getSizeLimitFromChart(data);
+
+    width = width > minWidth ? width : minWidth;
+    height = height > minHeight ? height : minHeight;
+
+    const onZoomSvg = localD3
+      .zoom()
+      .scaleExtent([0.5, 5])
+      .translateExtent([
+        [0, 0],
+        [width, height]
+      ])
+      .extent([
+        [0, 0],
+        [width, height]
+      ])
+      .on("zoom", zoomed);
+
+    const svg = localD3
       .select(".svg-container")
       .append("svg")
       .attr("width", width)
       .attr("height", height)
+      .call(onZoomSvg)
+      .on("mousedown", onMouseDownPage)
+      .on("mousemove", onMouseMoveSvg)
+      .on("dblclick.zoom", onDblClickZoomSvg)
       .on("click", onClickPage);
 
-    const svg = localD3.select("svg").append("g");
+    const gSvg = svg.append("g");
 
-    const defs = svg.append("svg:defs");
+    const defs = gSvg.append("svg:defs");
 
     defs
       .append("svg:marker")
@@ -165,16 +188,17 @@ export default {
       .append("path")
       .attr("d", "M 0 0 10 5 0 10 Z");
 
-    const rectGrid = svg
+    const rectBackground = gSvg
+      .append("rect")
+      .attr("class", "page-background")
+      .attr("width", width)
+      .attr("height", height);
+
+    const rectGrid = gSvg
       .append("rect")
       .attr("class", "page-grid")
       .attr("width", width)
       .attr("height", height);
-
-    const onPageZoom = localD3
-      .zoom()
-      .scaleExtent([0.5, 5])
-      .on("zoom", zoomed);
 
     const onDragNode = localD3
       .drag()
@@ -202,16 +226,7 @@ export default {
       .x(d => d.x)
       .y(d => d.y);
 
-    svg
-      .append("rect")
-      .attr("class", "page-zoom")
-      .attr("width", width)
-      .attr("height", height)
-      .on("mousedown", onMouseDownPage)
-      .call(onPageZoom)
-      .on("dblclickc, onDoubleClickLinklick.zoom", null);
-
-    const gContainer = svg
+    const gContainer = gSvg
       .append("g")
       .attr("id", "container")
       .on("mousemove", onMouseMoveContainer);
@@ -229,12 +244,27 @@ export default {
     updateLane();
     updateChart();
 
+    function getSizeLimitFromChart(data) {
+      const x = localD3.max(data.nodes, row => row.cx + 60 + row.width / 2);
+      const y = localD3.max(data.nodes, row => row.cy + 60 + row.height / 2);
+
+      return { x, y };
+    }
+
     function zoomed() {
       if (!localD3.event.ctrlKey) {
         // pageZoomScale = localD3.event.transform.k;
         gContainer.attr("transform", localD3.event.transform);
         rectGrid.attr("transform", localD3.event.transform);
       }
+    }
+
+    function onDblClickZoomSvg() {
+      localD3
+        .select(this)
+        .transition()
+        .duration(ANIMATION)
+        .call(onZoomSvg.transform, localD3.zoomIdentity);
     }
 
     function getLinePath(lineType, x1, y1, x2, y2) {
@@ -563,18 +593,10 @@ export default {
       const nodeBox = getBBox(node);
 
       if (
-        (containerBox.x < nodeBox.cx &&
-          containerBox.x + containerBox.width >
-            nodeBox.cx + nodeBox.width / 2 &&
-          containerBox.y < nodeBox.cy &&
-          containerBox.y + containerBox.height >
-            nodeBox.cy + nodeBox.height / 2) ||
-        (containerBox.x > nodeBox.cx &&
-          containerBox.x + containerBox.width <
-            nodeBox.cx + nodeBox.width / 2 &&
-          containerBox.y > nodeBox.cy &&
-          containerBox.y + containerBox.height <
-            nodeBox.cy + nodeBox.height / 2)
+        containerBox.x < nodeBox.cx &&
+        containerBox.x + containerBox.width > nodeBox.cx + nodeBox.width / 2 &&
+        containerBox.y < nodeBox.cy &&
+        containerBox.y + containerBox.height > nodeBox.cy + nodeBox.height / 2
       ) {
         return true;
       }
@@ -1096,6 +1118,7 @@ export default {
         });
 
         updatePositionLinks();
+        onResizeWindow();
       }
     }
 
@@ -1176,11 +1199,20 @@ export default {
       width = parseInt(localD3.select(".svg-container").style("width"), 10);
       height = parseInt(localD3.select(".svg-container").style("height"), 10);
 
+      let { x, y } = getSizeLimitFromChart(data);
+
+      minWidth = x;
+      minHeight = y;
+
+      width = width > minWidth ? width : minWidth;
+      height = height > minHeight ? height : minHeight;
+
       localD3
         .select("svg")
         .attr("width", width)
         .attr("height", height);
 
+      rectBackground.attr("width", width).attr("height", height);
       rectGrid.attr("width", width).attr("height", height);
 
       updateGrid();
@@ -1274,15 +1306,14 @@ export default {
       }
     }
 
-    function onMouseMoveDocument(e) {
-      console.log("onMouseMoveDocument");
-      if (isMouseSelectingMultiple && e.ctrlKey) {
+    function onMouseMoveSvg() {
+      console.log("onMouseMoveSvg");
+      if (isMouseSelectingMultiple && localD3.event.ctrlKey) {
         const rect = gContainer.node().getBBox();
-        // const mouseX = e.clientX / pageZoomScale - rect.x;
-        // const mouseY = e.clientY / pageZoomScale - rect.y;
-        console.log(e);
-        const mouseX = e.clientX - rect.x;
-        const mouseY = e.clientY - rect.y;
+        let { mouseX, mouseY } = getMousePosition(gContainer);
+
+        mouseX -= rect.x;
+        mouseY -= rect.y;
 
         const rectSelection = localD3.select(".rect-selecting-multiple");
         const rectSelectionX = rectSelection.attr("hrz-x");
@@ -1346,7 +1377,7 @@ export default {
     window.addEventListener("resize", onResizeWindow);
     document.addEventListener("keydown", onKeyDownDocument);
     document.addEventListener("keyup", onKeyUpDocument);
-    document.addEventListener("mousemove", onMouseMoveDocument);
+    // document.addEventListener("mousemove", onMouseMoveSvg);
     document.addEventListener("mouseup", onMouseUpDocument);
   }
 };
@@ -1356,9 +1387,13 @@ export default {
 .svg-container {
   width: 100%;
   height: 100%;
-  background-color: rgb(212, 212, 212);
-  box-sizing: border-box;
-  border: 1px solid rgb(212, 212, 212);
+}
+
+.page-background {
+  fill: rgb(212, 212, 212);
+  stroke: rgb(212, 212, 212);
+  stroke-width: 1;
+  pointer-events: none;
 }
 
 .page-zoom {
