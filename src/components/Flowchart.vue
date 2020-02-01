@@ -870,6 +870,7 @@ export default {
 
     function onDoubleClickNode(d) {
       console.log("onDoubleClickNode");
+      localD3.event.stopPropagation();
       if (localD3.event.ctrlKey || d.type === "finish") {
         return;
       }
