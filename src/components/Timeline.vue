@@ -17,7 +17,7 @@ export default {
   name: "hrz-timeline",
   mounted() {
     // Testing data
-
+    var timelineItemIndex = 0;
     // 2 levels lanes
     var two_levels = {
       laneLevels: 2,
@@ -73,93 +73,7 @@ export default {
                   actual: 45.6
                 }
               ],
-              objects: [
-                {
-                  start: "2020-01-01",
-                  finish: "2020-06-01",
-                  color: "#6C9ED4",
-                  line: 0,
-                  complete: 35,
-                  name: "Consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                },
-                {
-                  start: "2020-04-01",
-                  finish: "2020-10-01",
-                  color: "#76B7B2",
-                  line: 1,
-                  complete: 12,
-                  name: "Consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                },
-                {
-                  start: "2020-06-15",
-                  finish: "2020-11-01",
-                  color: "#6C9ED4",
-                  line: 0,
-                  complete: 28,
-                  name:
-                    "Lorem ipsum dolor sit amet consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                }
-              ]
+              objects: []
             },
             {
               id: "exec",
@@ -184,36 +98,7 @@ export default {
                   actual: 45.6
                 }
               ],
-              objects: [
-                {
-                  start: "2020-04-15",
-                  finish: "2020-08-01",
-                  color: "#F28E2C",
-                  line: 0,
-                  complete: 15,
-                  name: "Amet consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                }
-              ]
+              objects: []
             },
             {
               id: "closure",
@@ -238,64 +123,7 @@ export default {
                   actual: 45.6
                 }
               ],
-              objects: [
-                {
-                  start: "2020-02-01",
-                  finish: "2020-03-01",
-                  color: "#76B7B2",
-                  line: 0,
-                  complete: 90,
-                  name: "Lorem ipsum dolor sit elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                },
-                {
-                  start: "2020-09-01",
-                  finish: "2020-12-31",
-                  color: "#F28E2C",
-                  line: 0,
-                  complete: 85,
-                  name: "Lorem ipsum dolor sit amet elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                }
-              ]
+              objects: []
             }
           ]
         },
@@ -349,65 +177,7 @@ export default {
                   actual: 45.6
                 }
               ],
-              objects: [
-                {
-                  start: "2020-01-01",
-                  finish: "2020-06-01",
-                  color: "#6C9ED4",
-                  line: 0,
-                  complete: 35,
-                  name: "Consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                },
-                {
-                  start: "2020-06-15",
-                  finish: "2020-11-01",
-                  color: "#6C9ED4",
-                  line: 0,
-                  complete: 28,
-                  name:
-                    "Lorem ipsum dolor sit amet consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                }
-              ]
+              objects: []
             },
             {
               id: "exec",
@@ -432,36 +202,7 @@ export default {
                   actual: 45.6
                 }
               ],
-              objects: [
-                {
-                  start: "2020-04-15",
-                  finish: "2020-08-01",
-                  color: "#F28E2C",
-                  line: 0,
-                  complete: 15,
-                  name: "Amet consectetur adipiscing elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                }
-              ]
+              objects: []
             },
             {
               id: "closure",
@@ -486,92 +227,7 @@ export default {
                   actual: 45.6
                 }
               ],
-              objects: [
-                {
-                  start: "2020-02-01",
-                  finish: "2020-03-01",
-                  color: "#76B7B2",
-                  line: 0,
-                  complete: 90,
-                  name: "Lorem ipsum dolor sit elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                },
-                {
-                  start: "2020-05-01",
-                  finish: "2020-10-01",
-                  color: "#76B7B2",
-                  line: 0,
-                  complete: 90,
-                  name: "Lorem ipsum dolor sit elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                },
-                {
-                  start: "2020-08-01",
-                  finish: "2020-12-31",
-                  color: "#F28E2C",
-                  line: 1,
-                  complete: 85,
-                  name: "Lorem ipsum dolor sit amet elit",
-                  metrics: [
-                    {
-                      name: "BENEFIT",
-                      type: "currency",
-                      goal: true,
-                      actual: 23000000
-                    },
-                    {
-                      name: "TOTAL COST",
-                      type: "currency",
-                      goal: false,
-                      actual: 1650000
-                    },
-                    {
-                      name: "ROI",
-                      type: "percentage",
-                      goal: true,
-                      actual: 45.6
-                    }
-                  ]
-                }
-              ]
+              objects: []
             }
           ]
         }
@@ -1112,7 +768,14 @@ export default {
         const objects = d3
           .select(this)
           .selectAll("g.lane-object")
-          .data(d.objects);
+          .data(d.objects, d => d.id);
+
+        objects
+          .exit()
+          .transition()
+          .duration(duration)
+          .style("opacity", 0)
+          .remove();
 
         const objectsEnter = objects
           .enter()
@@ -1123,7 +786,8 @@ export default {
             const y = d.line * lineHeight;
             return "translate(" + x + "," + y + ")";
           })
-          .call(dragObject);
+          .call(dragObject)
+          .on("click", selectTimelineItem);
 
         objectsEnter
           .append("rect")
@@ -1456,6 +1120,7 @@ export default {
     var format = d3.timeFormat("%Y-%m-%d");
 
     function objectResized(d) {
+      //TODO Validate finish date is not smaller then start date
       var point = d3.mouse(this.parentNode.parentNode),
         p = { x: point[0], y: point[1] };
 
@@ -1492,6 +1157,7 @@ export default {
         .raise()
         .attr("transform", d => {
           let mouseX = d3.event.x + d.delta;
+          d.line = roundLine(d3.event.y, lineHeight, 100);
           if (mouseX < 1) {
             mouseX = 1;
           } else if (mouseX > scaleRangeMax) {
@@ -1595,13 +1261,54 @@ export default {
       }
 
       const width = p.x < 20 ? 20 : p.x;
-      console.log(p.x + " - " + template.attr("x") + " - " + width);
       template.attr("width", width);
     }
 
-    function saveNewObject() {
-      console.log("mouseup");
+    function saveNewObject(d) {
+      const bb = d3
+        .select("rect.template")
+        .node()
+        .getBBox();
+
+      const obj = {
+        id: new Date().getTime(),
+        start: format(xScale.invert(bb.x)),
+        finish: format(xScale.invert(bb.x + bb.width)),
+        color: d3.schemeTableau10[Math.round(Math.random() * 10)],
+        line: roundLine(bb.y, lineHeight, 100),
+        complete: 0,
+        name: "New timeline item " + timelineItemIndex++,
+        metrics: [
+          {
+            name: "BENEFIT",
+            type: "currency",
+            goal: true,
+            actual: 23000000
+          },
+          {
+            name: "TOTAL COST",
+            type: "currency",
+            goal: false,
+            actual: 1650000
+          },
+          {
+            name: "ROI",
+            type: "percentage",
+            goal: true,
+            actual: 45.6
+          }
+        ]
+      };
+
+      d.objects.push(obj);
       d3.selectAll(".template").remove();
+      renderLaneWithSubLane();
+    }
+
+    function selectTimelineItem() {
+      const state = !d3.select(this).classed("selected");
+      clearSelection();
+      d3.select(this).classed("selected", state);
     }
 
     function selectMilestone() {
@@ -1653,6 +1360,17 @@ export default {
           renderMilestone();
           d3.selectAll(".sub-lane-milestones").call(renderLaneMilestonesLines);
           d3.selectAll(".lane-milestones").call(renderLaneMilestonesLines);
+        } else if (item.classed("lane-object")) {
+          d3.select(this.parentNode)
+            .datum()
+            .objects.splice(
+              d3
+                .select(this.parentNode)
+                .datum()
+                .objects.indexOf(d),
+              1
+            );
+          renderLaneWithSubLane();
         }
       });
     }
@@ -1701,6 +1419,18 @@ export default {
 #timeline {
   width: 100%;
   font-family: Roboto !important;
+}
+
+#timeline text,
+#timeline span,
+#timeline .title {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
 }
 #fixed {
   width: 100%;
@@ -1784,6 +1514,10 @@ export default {
 }
 #gMilestone .selected text {
   fill: #656565 !important;
+}
+.sub-lane-objects .selected .duration {
+  stroke-width: 1px;
+  stroke: #a5a5a5;
 }
 .milestone {
   cursor: pointer;
