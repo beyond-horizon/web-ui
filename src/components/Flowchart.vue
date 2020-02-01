@@ -117,7 +117,7 @@ export default {
     let width = parseInt(localD3.select(".svg-container").style("width"), 10);
     let height = parseInt(localD3.select(".svg-container").style("height"), 10);
 
-    const RESOLUTION = 10;
+    const RESOLUTION = 20;
     const MIN_LANE_HEIGHT = 120;
     const ARROW_SIZE = 10;
     const ROUND_CORNER = 5;
@@ -257,7 +257,7 @@ export default {
     }
 
     function getBBox(node) {
-      const nodeBBox = node.node().getCTM();
+      const nodeBBox = node.node().transform.baseVal.consolidate().matrix;
       const nodeType = node.attr("hrz-type");
       const bbox = { cx: nodeBBox.e, cy: nodeBBox.f };
       let size = {};
@@ -945,7 +945,6 @@ export default {
       localD3.event.stopPropagation();
       clearAllSelection();
       localD3.select(this).classed("link-selected", true);
-      console.log(data);
     }
 
     function selectLane(lane, select) {
@@ -1118,7 +1117,7 @@ export default {
           const source = localD3.select(`#node_${d.source}`);
           const target = localD3.select(`#node_${d.target}`);
 
-          console.log(getLinePosition(source, target));
+          // console.log(getLinePosition(source, target));
           const { lineType, x1, y1, x2, y2 } = getLinePosition(source, target);
 
           d.type = lineType;
@@ -1278,12 +1277,10 @@ export default {
     function onMouseMoveDocument(e) {
       console.log("onMouseMoveDocument");
       if (isMouseSelectingMultiple && e.ctrlKey) {
-        // const rect = gContainer.node().getBoundingClientRect();
-        // const rect = getBBox(gContainer);
         const rect = gContainer.node().getBBox();
         // const mouseX = e.clientX / pageZoomScale - rect.x;
         // const mouseY = e.clientY / pageZoomScale - rect.y;
-
+        console.log(e);
         const mouseX = e.clientX - rect.x;
         const mouseY = e.clientY - rect.y;
 
